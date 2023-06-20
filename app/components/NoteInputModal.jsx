@@ -84,19 +84,24 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         borderBottomColor: colors.primary,
         fontSize: 20,
-        color: colors.dark,
+        color: colors.dark
     },
     title: {
-
+        height: 40,
+        marginBottom: 15,
+        fontWeight: 'bold'
     },
     desc: {
-
+        height: 90
     },
     modalBG: {
-
+        flex: 1,
+        zIndex: -1
     },
     btnContainer: {
-
+        flexDirection: 'row',
+        justifyContent: 'center',
+        paddingHorizontal: 15
     }
 })
 

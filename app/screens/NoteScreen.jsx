@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, StyleSheet, Text, TouchableWithoutFeedback, StatusBar, FlatList, Keyboard } from 'react-native';
+import { View, StyleSheet, Text, TouchableWithoutFeedback, StatusBar, FlatList, Keyboard, SafeAreaView } from 'react-native';
 import Note from '../components/Note';
 import NotFound from '../components/NotFound';
 import RoundIconBtn from '../components/RoundIconBtn';
@@ -20,19 +20,19 @@ const reverseData = (data) => {
 }
 
 const NoteScreen = ({ user, navigation }) => {
-    const [great, setGreat] = useState('');
+    const [greet, setGreet] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [resultNotFound, setResultNotFound] = useState(false);
     const { notes, setNotes, findNotes } = useNotes();
-    const findGreat = () => {
+    const findGreet = () => {
         const hrs = new Date().getHours();
-        if (hrs === 0 || hrs < 12) return setGreat("오전");
-        if (hrs === 1 || hrs < 17) return setGreat("오후");
-        setGreat("밤");
+        if (hrs === 0 || hrs < 12) return setGreet("오전");
+        if (hrs === 1 || hrs < 17) return setGreet("오후");
+        setGreet("밤");
     }
     useEffect(() => {
-        findGreat();
+        findGreet();
     }, []);
     const reverseNotes = reverseData(notes);
 
@@ -74,12 +74,12 @@ const NoteScreen = ({ user, navigation }) => {
     }
 
     return (
-        <>
+        < SafeAreaView style={styles.container}>
             <StatusBar barStyle="dark-content" backgroundColor={colors.light} />
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container}>
-                    <Text>
-                        {user.name}님이 {great}에 쓰심.
+                    <Text style={styles.greet}>
+                        {user.name}님, {greet}입니다. 반갑습니다.
                     </Text>
                     {notes.length ? (
                         <SearchBar
@@ -115,10 +115,19 @@ const NoteScreen = ({ user, navigation }) => {
 
             <RoundIconBtn antIconName='plus' style={styles.addBtn} onPress={() => setModalVisible(true)} />
             <NoteInputModal visible={modalVisible} onClose={() => setModalVisible(false)} onSubmit={handleOnSubmit} />
-        </>
+        </ SafeAreaView>
     );
 };
 const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    greet: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginVertical: 10,
+        color: colors.dark
+    },
     header: {
         fontSize: 15,
         fontWeight: 'bold'
