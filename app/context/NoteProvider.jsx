@@ -4,14 +4,30 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const NoteContext = createContext();
 
 const NoteProvider = ({ children }) => {
+
     const [notes, setNotes] = useState([]);
+
     const findNotes = async () => {
-        const result = await AsyncStorage.getItem('notes');
-        if (result !== null) setNotes(JSON.parse(result));
-    }
+        try {
+            const result = await AsyncStorage.getItem('notes');
+            if (result !== null) setNotes(JSON.parse(result));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
-        findNotes();
-    }, []);
+        const saveNotes = async () => {
+            try {
+                await AsyncStorage.setItem('notes', JSON.stringify(notes));
+            } catch (error) {
+                // handle or throw error
+                console.error(error);
+            }
+        };
+        saveNotes();
+    }, [notes]);
+
     return (
         <NoteContext.Provider value={{ notes, setNotes, findNotes }}>
             {children}

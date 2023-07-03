@@ -10,8 +10,12 @@ const Intro = ({ onFinish }) => {
 
     const handleSubmit = async () => {
         const user = { name: name };
-        await AsyncStorage.setItem('user', JSON.stringify(user));
-        if (onFinish) onFinish();
+        try {
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+            if (onFinish) onFinish();
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (

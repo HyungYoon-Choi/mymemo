@@ -6,9 +6,15 @@ import RoundIconBtn from './RoundIconBtn';
 const NoteInputModal = ({ visible, onClose, onSubmit, note, isEdit }) => {
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
+
     const handleModalClose = () => {
         Keyboard.dismiss();
+        if (!isEdit) {
+            setTitle('');
+            setDesc('');
+        }
     }
+
     useEffect(() => {
         if (isEdit) {
             setTitle(note.title);

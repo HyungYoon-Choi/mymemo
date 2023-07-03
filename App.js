@@ -1,10 +1,10 @@
-import NoteProvider from './app/context/NoteProvider';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import NoteScreen from './app/screens/NoteScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import NoteProvider from './app/context/NoteProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NoteScreen from './app/screens/NoteScreen';
 import Intro from './app/screens/Intro';
 import NoteDetail from './app/components/NoteDetail';
 
@@ -15,12 +15,17 @@ export default function App() {
   const [isAppFirstOpen, setIsAppFirstOpen] = useState(false);
 
   const findUser = async () => {
-    const result = await AsyncStorage.getItem('user');
-    if (result === null) return setIsAppFirstOpen(true);
+    try {
+      const result = await AsyncStorage.getItem('user');
+      if (result === null) return setIsAppFirstOpen(true);
 
-    setUser(JSON.parse(result));
-    setIsAppFirstOpen(false);
+      setUser(JSON.parse(result));
+      setIsAppFirstOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
 
   useEffect(() => {
     findUser();

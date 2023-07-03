@@ -12,7 +12,7 @@ const formatDate = (ms) => {
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
-    const hrs = date.getHours();
+    const hrs = (date.getHours() - 3) % 24;
     const min = date.getMinutes();
     const sec = date.getSeconds();
 
@@ -27,27 +27,28 @@ const NoteDetail = (props) => {
     const headerHeight = useHeaderHeight();
 
     const deleteNote = async () => {
-        const result = await AsyncStorage.getItem('notes')
-        let notes = []
-        if (result !== null) notes = JSON.parse(result)
-        const newNotes = notes.filter(n => n.id !== note.id)
-        setNotes(newNotes)
-        await AsyncStorage.setItem('notes', JSON.stringify(newNotes))
-        props.navigation.goBack()
+        const result = await AsyncStorage.getItem('notes');
+        let notes = [];
+        if (result !== null) notes = JSON.parse(result);
+        const newNotes = notes.filter(n => n.id !== note.id);
+        setNotes(newNotes);
+        await AsyncStorage.setItem('notes', JSON.stringify(newNotes));
+        props.navigation.goBack();
     }
 
     const displayDeleteAlert = () => {
         Alert.alert(
-            '정말로 삭제 하시겠습니다?',
+            '정말로 삭제 하시겠습니까?',
             '삭제하면 복구할 수 없습니다.',
             [
                 {
-                    text: 'Delete',
-                    onPress: deleteNote
+                    text: '취소',
+                    onPress: () => console.log('취소함'),
+                    style: 'cancel'
                 },
                 {
-                    text: '취소',
-                    onPress: () => console.log('취소함')
+                    text: 'Delete',
+                    onPress: deleteNote
                 }
             ],
             {
@@ -90,10 +91,9 @@ const NoteDetail = (props) => {
                 <Text style={styles.time}>
                     {
                         note.isUpdate
-                            ? `UPdate At ${formatDate(note.time)}`
+                            ? `Updated At ${formatDate(note.time)}`
                             : `Created At ${formatDate(note.time)}`
                     }
-                    ${formatDate(note.time)}
                 </Text>
                 <Text style={styles.title}>
                     {note.title}

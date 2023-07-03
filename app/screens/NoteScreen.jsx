@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, StyleSheet, Text, TouchableWithoutFeedback, StatusBar, FlatList, Keyboard, SafeAreaView } from 'react-native';
 import Note from '../components/Note';
@@ -25,52 +25,68 @@ const NoteScreen = ({ user, navigation }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [resultNotFound, setResultNotFound] = useState(false);
     const { notes, setNotes, findNotes } = useNotes();
+    const [filteredNotes, setFilteredNotes] = useState(notes);
+
     const findGreet = () => {
         const hrs = new Date().getHours();
         if (hrs === 0 || hrs < 12) return setGreet("오전");
         if (hrs === 1 || hrs < 17) return setGreet("오후");
         setGreet("밤");
     }
+
     useEffect(() => {
         findGreet();
     }, []);
-    const reverseNotes = reverseData(notes);
+
+    useEffect(() => {
+        setFilteredNotes(notes);
+    }, [notes]);
+
+    useEffect(() => {
+        const loadNotes = async () => {
+            const savedNotes = await AsyncStorage.getItem('notes');
+            if (savedNotes) {
+                setNotes(JSON.parse(savedNotes));
+            }
+        }
+        loadNotes();
+    }, []);
+
+    const reverseNotes = useMemo(() => reverseData(notes), [notes]);
 
     const handleOnSubmit = async (title, desc) => {
         const note = { id: Date.now(), title, desc, time: Date.now() };
-        const updateNotes = [...notes, note];
-        setNotes(updateNotes);
-        await AsyncStorage.setItem('ntoes', JSON.stringify(updateNotes));
+        const updatedNotes = [...notes, note];
+        setNotes(updatedNotes);
+        await AsyncStorage.setItem('notes', JSON.stringify(updatedNotes));
     }
 
     const openNote = (note) => {
         navigation.navigate('NoteDetail', { note })
     }
 
-    const handleOnSearchInput = async text => {
-        setSearchQuery(text);
-        if (!text.trim()) {
-            setSearchQuery('');
-            setResultNotFound(false);
-            return await findNotes();
-        }
-        const filterNote = notes.filter(note => {
-            if (note.title.toLowerCase().include(text.toLowerCase())) {
-                return note;
-            }
-        });
-
-        if (filterNote.length) {
-            setNotes([...filterNote]);
-        } else {
-            setResultNotFound(true)
-        }
-    }
-
     const handleOnClear = async () => {
         setSearchQuery('');
         setResultNotFound(false);
         await findNotes();
+    }
+
+    const handleOnSearchInput = text => {
+        setSearchQuery(text);
+        if (!text.trim()) {
+            setSearchQuery('');
+            setResultNotFound(false);
+            setFilteredNotes(notes);
+            return;
+        }
+        const filtered = notes.filter(note =>
+            note.title.toLowerCase().includes(text.toLowerCase())
+        );
+        if (filtered.length) {
+            setFilteredNotes(filtered);
+        } else {
+            setResultNotFound(true);
+        }
     }
 
     return (
@@ -94,7 +110,7 @@ const NoteScreen = ({ user, navigation }) => {
                         <NotFound />
                     ) : (
                         <FlatList
-                            data={reverseNotes}
+                            data={reverseData(filteredNotes)}
                             numColumns={2}
                             columnWrapperStyle={{ justifyContent: 'space-between', marginBottom: 15 }}
                             keyExtractor={(item) => item.id.toString()}
