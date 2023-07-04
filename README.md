@@ -13,4 +13,39 @@
 - AsyncStorage를 사용한 메모 데이터 유지
 
 ## 스크린샷
-![Screen1](https://github.com/HyungYoon-Choi/mymemo/assets/125331885/d7a6af65-8039-4cd0-bf17-4690aae75667)
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="https://github.com/HyungYoon-Choi/mymemo/assets/125331885/87de9d55-d43e-4d92-90c5-3b1c4befd0a7" alt="Screen1" width="200"/>
+        <br />
+        <em>Screen1</em>
+      </td>
+      <td align="center">
+        <img src="https://github.com/HyungYoon-Choi/mymemo/assets/125331885/3ec6ee17-3eb9-46bd-9ece-5ab74dcfbd07" alt="Screen2" width="200"/>
+        <br />
+        <em>Screen2</em>
+      </td>
+      <td align="center">
+        <img src="https://github.com/HyungYoon-Choi/mymemo/assets/125331885/59c81f59-0bc4-4e07-9931-2b74b3b2e33f" alt="Screen3" width="200"/>
+        <br />
+        <em>Screen3</em>
+      </td>
+      <td align="center">
+        <img src="https://github.com/HyungYoon-Choi/mymemo/assets/125331885/6863eaf1-c7ef-4d18-8d57-bb78ca1dd80d" alt="Screen4" width="200"/>
+        <br />
+        <em>Screen4</em>
+      </td>
+      <td align="center">
+        <img src="https://github.com/HyungYoon-Choi/mymemo/assets/125331885/27a23c9e-9955-4e29-bf6d-eb691aa180d3" alt="Screen5" width="200"/>
+        <br />
+        <em>Screen5</em>
+      </td>
+      <td align="center">
+        <img src="https://github.com/HyungYoon-Choi/mymemo/assets/125331885/a6922403-52e3-48ff-9d70-ae33c4e7d7b8" alt="Screen6" width="200"/>
+        <br />
+        <em>Screen6</em>
+      </td>
+    </tr>
+  </table>
+</div>
